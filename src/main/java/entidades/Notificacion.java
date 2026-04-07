@@ -1,11 +1,11 @@
-package main.java.entidades;
+package entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import main.java.enums.EstadoNotificacion;
-import main.java.enums.MedioNotificacion;
-import main.java.enums.TipoNotificacion;
+import enums.EstadoNotificacion;
+import enums.MedioNotificacion;
+import enums.TipoNotificacion;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,15 +15,16 @@ import java.util.List;
 @Entity
 @Table(name = "notificaciones")
 public class Notificacion {
-    
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String asunto;
-    
+
     @Column(columnDefinition = "TEXT")
     private String cuerpo;
-    
+
     private String emailDestino;
     private String telefonoDestino;
     private LocalDateTime programacionEnvio;

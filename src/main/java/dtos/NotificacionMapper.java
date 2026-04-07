@@ -1,11 +1,12 @@
-package main.java.dtos;
+package dtos;
 
-import main.java.entidades.Notificacion;
+import entidades.Notificacion;
 
 public class NotificacionMapper {
 
     public static NotificacionDTO toDto(Notificacion entidad) {
-        if (entidad == null) return null;
+        if (entidad == null)
+            return null;
 
         return new NotificacionDTO(
                 entidad.getId(),
@@ -18,12 +19,12 @@ public class NotificacionMapper {
                 entidad.getTipoNotificacion(),
                 entidad.getEstado(),
                 entidad.getMensajeError(),
-                entidad.getMomentoRealEnvio()
-        );
+                entidad.getMomentoRealEnvio());
     }
 
     public static Notificacion toEntity(NotificacionDTO dto) {
-        if (dto == null) return null;
+        if (dto == null)
+            return null;
 
         Notificacion entidad = new Notificacion();
         entidad.setId(dto.getId());
@@ -42,7 +43,8 @@ public class NotificacionMapper {
     }
 
     public static Notificacion toEntity(NotificacionNueva dtoNueva) {
-        if (dtoNueva == null) return null;
+        if (dtoNueva == null)
+            return null;
 
         Notificacion entidad = new Notificacion();
         entidad.setAsunto(dtoNueva.getAsunto());

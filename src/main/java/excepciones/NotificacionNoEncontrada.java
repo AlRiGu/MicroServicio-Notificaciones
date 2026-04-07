@@ -1,4 +1,4 @@
-package main.java.excepciones;
+package excepciones;
 
 public class NotificacionNoEncontrada extends RuntimeException {
     public NotificacionNoEncontrada() {

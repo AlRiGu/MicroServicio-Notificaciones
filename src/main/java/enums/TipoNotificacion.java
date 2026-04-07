@@ -1,4 +1,4 @@
-package main.java.enums;
+package enums;
 
 public enum TipoNotificacion {
     ANUNCIO_NOTA_ESTUDIANTE,
