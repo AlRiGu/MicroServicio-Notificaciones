@@ -1,9 +1,9 @@
-package main.java.servicios;
+package servicios;
 
-import main.java.entidades.Notificacion;
-import main.java.enums.EstadoNotificacion;
-import main.java.excepciones.NotificacionNoEncontrada;
-import main.java.repositorios.NotificacionRepositorio;
+import entidades.Notificacion;
+import enums.EstadoNotificacion;
+import excepciones.NotificacionNoEncontrada;
+import repositorios.NotificacionRepositorio;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

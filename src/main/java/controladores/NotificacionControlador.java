@@ -1,11 +1,11 @@
-package main.java.controladores;
+package controladores;
 
-import main.java.dtos.NotificacionDTO;
-import main.java.dtos.NotificacionMapper;
-import main.java.dtos.NotificacionNueva;
-import main.java.entidades.Notificacion;
-import main.java.excepciones.NotificacionNoEncontrada;
-import main.java.servicios.NotificacionServicio;
+import dtos.NotificacionDTO;
+import dtos.NotificacionMapper;
+import dtos.NotificacionNueva;
+import entidades.Notificacion;
+import excepciones.NotificacionNoEncontrada;
+import servicios.NotificacionServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,5 +73,6 @@ public class NotificacionControlador {
 
     @ExceptionHandler(NotificacionNoEncontrada.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void noEncontrado() {}
+    public void noEncontrado() {
+    }
 }

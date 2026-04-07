@@ -1,10 +1,10 @@
-package main.java.dtos;
+package dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.java.enums.MedioNotificacion;
-import main.java.enums.TipoNotificacion;
+import enums.MedioNotificacion;
+import enums.TipoNotificacion;
 
 import java.time.LocalDateTime;
 import java.util.List;
