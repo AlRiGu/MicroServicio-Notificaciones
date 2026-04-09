@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface NotificacionRepositorio extends JpaRepository<Notificacion, Long> {
     List<Notificacion> findByEstado(EstadoNotificacion estado);
+    List<Notificacion> findByTipoNotificacion(TipoNotificacion tipo);
     List<Notificacion> findByEstadoAndTipoNotificacion(EstadoNotificacion estado, TipoNotificacion tipoNotificacion);
 }
