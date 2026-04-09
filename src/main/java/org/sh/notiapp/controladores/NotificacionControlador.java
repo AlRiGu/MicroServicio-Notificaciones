@@ -71,6 +71,8 @@ public class NotificacionControlador {
         servicio.eliminarNotificacion(id);
     }
 
+
+
     @ExceptionHandler(NotificacionNoEncontrada.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void noEncontrado() {
