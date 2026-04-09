@@ -1,6 +1,6 @@
-package repositorios;
+package org.sh.notiapp.repositorios;
 
-import entidades.Notificacion;
+import org.sh.notiapp.entidades.Notificacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
