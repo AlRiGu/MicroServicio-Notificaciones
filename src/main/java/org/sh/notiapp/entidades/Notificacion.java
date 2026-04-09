@@ -1,14 +1,15 @@
-package entidades;
+package org.sh.notiapp.entidades;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import enums.EstadoNotificacion;
-import enums.MedioNotificacion;
-import enums.TipoNotificacion;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.sh.notiapp.enums.EstadoNotificacion;
+import org.sh.notiapp.enums.MedioNotificacion;
+import org.sh.notiapp.enums.TipoNotificacion;
 
 @Getter
 @Setter

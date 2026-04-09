@@ -1,11 +1,11 @@
-package controladores;
+package org.sh.notiapp.controladores;
 
-import dtos.NotificacionDTO;
-import dtos.NotificacionMapper;
-import dtos.NotificacionNueva;
-import entidades.Notificacion;
-import excepciones.NotificacionNoEncontrada;
-import servicios.NotificacionServicio;
+import org.sh.notiapp.dtos.NotificacionDTO;
+import org.sh.notiapp.dtos.NotificacionMapper;
+import org.sh.notiapp.dtos.NotificacionNueva;
+import org.sh.notiapp.entidades.Notificacion;
+import org.sh.notiapp.excepciones.NotificacionNoEncontrada;
+import org.sh.notiapp.servicios.NotificacionServicio;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

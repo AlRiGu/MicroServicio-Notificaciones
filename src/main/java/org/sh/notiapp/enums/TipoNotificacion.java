@@ -1,4 +1,4 @@
-package enums;
+package org.sh.notiapp.enums;
 
 public enum TipoNotificacion {
     ANUNCIO_NOTA_ESTUDIANTE,
