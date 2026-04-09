@@ -4,6 +4,8 @@ import org.sh.notiapp.dtos.NotificacionDTO;
 import org.sh.notiapp.dtos.NotificacionMapper;
 import org.sh.notiapp.dtos.NotificacionNueva;
 import org.sh.notiapp.entidades.Notificacion;
+import org.sh.notiapp.enums.EstadoNotificacion;
+import org.sh.notiapp.enums.TipoNotificacion;
 import org.sh.notiapp.excepciones.NotificacionNoEncontrada;
 import org.sh.notiapp.servicios.NotificacionServicio;
 import org.springframework.http.HttpStatus;
@@ -25,8 +27,11 @@ public class NotificacionControlador {
     }
 
     @GetMapping("")
-    public List<NotificacionDTO> obtenerTodasNotificaciones() {
-        return servicio.obtenerTodasNotificaciones()
+    public List<NotificacionDTO> obtenerTodasNotificaciones(
+            @RequestParam(required = false) EstadoNotificacion estado,
+            @RequestParam(required = false) TipoNotificacion tipo) {
+        
+        return servicio.obtenerNotificacionesFiltradas(estado, tipo)
                 .stream()
                 .map(NotificacionMapper::toDto)
                 .toList();
@@ -70,8 +75,6 @@ public class NotificacionControlador {
     public void eliminar(@PathVariable Long id) {
         servicio.eliminarNotificacion(id);
     }
-
-
 
     @ExceptionHandler(NotificacionNoEncontrada.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
