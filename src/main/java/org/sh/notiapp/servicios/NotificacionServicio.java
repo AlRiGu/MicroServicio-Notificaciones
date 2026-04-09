@@ -55,4 +55,17 @@ public class NotificacionServicio {
 
         return repositorio.save(existente);
     }
+
+    public void abortarPendientes(org.sh.notiapp.enums.TipoNotificacion tipo) {
+        List<Notificacion> pendientes;
+        if (tipo == null) {
+            pendientes = repositorio.findByEstado(EstadoNotificacion.PENDIENTE);
+        } else {
+            pendientes = repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, tipo);
+        }
+        for (Notificacion notificacion : pendientes) {
+            notificacion.setEstado(EstadoNotificacion.ABORTADA);
+        }
+        repositorio.saveAll(pendientes);
+    }
 }
