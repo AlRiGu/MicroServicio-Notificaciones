@@ -1,4 +1,4 @@
-package excepciones;
+package org.sh.notiapp.excepciones;
 
 public class NotificacionNoEncontrada extends RuntimeException {
     public NotificacionNoEncontrada() {

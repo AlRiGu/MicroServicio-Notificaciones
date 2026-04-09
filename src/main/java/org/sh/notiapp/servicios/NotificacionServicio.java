@@ -1,9 +1,9 @@
-package servicios;
+package org.sh.notiapp.servicios;
 
-import entidades.Notificacion;
-import enums.EstadoNotificacion;
-import excepciones.NotificacionNoEncontrada;
-import repositorios.NotificacionRepositorio;
+import org.sh.notiapp.entidades.Notificacion;
+import org.sh.notiapp.enums.EstadoNotificacion;
+import org.sh.notiapp.excepciones.NotificacionNoEncontrada;
+import org.sh.notiapp.repositorios.NotificacionRepositorio;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

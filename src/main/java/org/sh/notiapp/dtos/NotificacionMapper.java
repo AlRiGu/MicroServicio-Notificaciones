@@ -1,6 +1,6 @@
-package dtos;
+package org.sh.notiapp.dtos;
 
-import entidades.Notificacion;
+import org.sh.notiapp.entidades.Notificacion;
 
 public class NotificacionMapper {
 
