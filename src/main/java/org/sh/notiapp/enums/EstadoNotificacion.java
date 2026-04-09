@@ -1,4 +1,4 @@
-package enums;
+package org.sh.notiapp.enums;
 
 public enum EstadoNotificacion {
     PENDIENTE,

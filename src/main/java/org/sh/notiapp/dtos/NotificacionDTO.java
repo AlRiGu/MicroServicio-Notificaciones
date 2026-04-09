@@ -1,18 +1,21 @@
-package dtos;
+package org.sh.notiapp.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import enums.MedioNotificacion;
-import enums.TipoNotificacion;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.sh.notiapp.enums.EstadoNotificacion;
+import org.sh.notiapp.enums.MedioNotificacion;
+import org.sh.notiapp.enums.TipoNotificacion;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificacionNueva {
+public class NotificacionDTO {
+    private Long id;
     private String asunto;
     private String cuerpo;
     private String emailDestino;
@@ -20,4 +23,7 @@ public class NotificacionNueva {
     private LocalDateTime programacionEnvio;
     private List<MedioNotificacion> medios;
     private TipoNotificacion tipoNotificacion;
+    private EstadoNotificacion estado;
+    private String mensajeError;
+    private LocalDateTime momentoRealEnvio;
 }
