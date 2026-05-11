@@ -37,6 +37,7 @@ public class Notificacion {
     @Column(nullable = false)
     private String emailDestino;
     private String telefonoDestino;
+    @Column(nullable = false)
     private LocalDateTime programacionEnvio;
 
     @ElementCollection(targetClass = MedioNotificacion.class)
