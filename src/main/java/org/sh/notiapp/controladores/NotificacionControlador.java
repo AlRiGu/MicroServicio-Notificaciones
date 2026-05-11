@@ -30,7 +30,8 @@ public class NotificacionControlador {
     public List<NotificacionDTO> obtenerTodasNotificaciones(
             @RequestParam(required = false) EstadoNotificacion estado,
             @RequestParam(required = false) TipoNotificacion tipo) {
-        
+
+        //coge las notificadiones que pasen el filtro,las coloca en un stream,las transforma a Dto, y las devuelve en una lista
         return servicio.obtenerNotificacionesFiltradas(estado, tipo)
                 .stream()
                 .map(NotificacionMapper::toDto)
