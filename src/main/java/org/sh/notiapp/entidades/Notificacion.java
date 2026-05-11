@@ -40,6 +40,7 @@ public class Notificacion {
     @Column(nullable = false)
     private LocalDateTime programacionEnvio;
 
+    //al ser una lista oblica a crear otra tabla para este argumento.
     @ElementCollection(targetClass = MedioNotificacion.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "notificacion_medios", joinColumns = @JoinColumn(name = "notificacion_id"))
