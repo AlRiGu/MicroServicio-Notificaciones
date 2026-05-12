@@ -35,6 +35,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/notificaciones/**")
                         .authenticated()
 
+                        // DELETE solo para ADMINISTRADOR
+                        .requestMatchers(HttpMethod.DELETE, "/notificaciones/**").hasRole("ADMINISTRADOR")
+
+                        // PUT solo para ADMINISTRADOR
+                        .requestMatchers(HttpMethod.PUT, "/notificaciones/**").hasRole("ADMINISTRADOR")
+
+                        // POST PENDIENTES solo para ADMINISTRADOR
+                        .requestMatchers(HttpMethod.POST, "/pendientes/**").hasRole("ADMINISTRADOR")
+
                         // Todo lo demás prohibido
                         .anyRequest().denyAll()
                 )
