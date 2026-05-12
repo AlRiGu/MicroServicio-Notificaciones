@@ -31,8 +31,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/notificaciones")
                         .hasAnyRole("VICERRECTORADO","ADMINISTRADOR")
 
-
-
                         // GET requiere estar autenticado
                         .requestMatchers(HttpMethod.GET, "/notificaciones/**")
                         .authenticated()
