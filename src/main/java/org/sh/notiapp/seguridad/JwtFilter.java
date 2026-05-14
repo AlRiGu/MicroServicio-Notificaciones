@@ -1,6 +1,5 @@
 package org.sh.notiapp.seguridad;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
