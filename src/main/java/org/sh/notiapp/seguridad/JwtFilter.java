@@ -19,13 +19,12 @@ import java.util.List;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static final String SECRET =
-            "desarrollodeaplicacionesweb20252026desarrollodeaplicacionesweb20252026";
+    private static final String SECRET = "desarrollodeaplicacionesweb20252026desarrollodeaplicacionesweb20252026";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
@@ -45,8 +44,9 @@ public class JwtFilter extends OncePerRequestFilter {
                     .getBody();
 
             String userId = claims.getSubject();
+            @SuppressWarnings("unchecked")
             List<String> roles = claims.get("role", List.class);
-            if(roles == null){
+            if (roles == null) {
                 roles = List.of();
             }
             var authorities = roles.stream()
