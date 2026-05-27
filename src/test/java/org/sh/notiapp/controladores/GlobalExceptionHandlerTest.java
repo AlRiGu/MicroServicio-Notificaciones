@@ -2,8 +2,11 @@ package org.sh.notiapp.controladores;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,4 +36,38 @@ class GlobalExceptionHandlerTest {
         // Comprobamos que también incluye la traza de la clase (StackTrace)
         assertTrue(respuesta.getBody().contains("java.lang.RuntimeException"));
     }
+
+    @Test
+    @DisplayName("Debe devolver 415 cuando el Content-Type no es soportado")
+    void handleUnsupportedMediaType_Devuelve415() {
+        GlobalExceptionHandler manejador = new GlobalExceptionHandler();
+
+        HttpMediaTypeNotSupportedException ex =
+                new HttpMediaTypeNotSupportedException("application/octet-stream");
+
+        ResponseEntity<String> respuesta =
+                manejador.handleUnsupportedMediaType(ex);
+
+        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, respuesta.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Debe devolver 400 cuando falla la validación del DTO")
+    void handleBadRequest_Devuelve400() {
+
+        GlobalExceptionHandler manejador = new GlobalExceptionHandler();
+
+        // Mock de la excepción de validación
+        MethodArgumentNotValidException ex =
+                Mockito.mock(MethodArgumentNotValidException.class);
+
+        ResponseEntity<String> respuesta =
+                manejador.handleBadRequest(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, respuesta.getStatusCode());
+    }
+
+
+
+
 }

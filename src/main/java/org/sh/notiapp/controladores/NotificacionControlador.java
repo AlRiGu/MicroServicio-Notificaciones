@@ -1,5 +1,6 @@
 package org.sh.notiapp.controladores;
 
+import jakarta.validation.Valid;
 import org.sh.notiapp.dtos.NotificacionDTO;
 import org.sh.notiapp.dtos.NotificacionMapper;
 import org.sh.notiapp.dtos.NotificacionNueva;
@@ -46,7 +47,7 @@ public class NotificacionControlador {
 
     @PostMapping("")
     public ResponseEntity<NotificacionDTO> aniadir(
-            @RequestBody NotificacionNueva nueva,
+            @Valid @RequestBody NotificacionNueva nueva,
             UriComponentsBuilder uriBuilder) {
 
         Notificacion entidad = NotificacionMapper.toEntity(nueva);
