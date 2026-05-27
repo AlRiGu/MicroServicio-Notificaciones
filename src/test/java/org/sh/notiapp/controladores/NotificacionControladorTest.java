@@ -84,6 +84,19 @@ class NotificacionControladorTest {
     }
 
     @Test
+    @DisplayName("GET /notificaciones - 200 y lista vacía")
+    void obtenerTodas_Vacia() throws Exception {
+
+        Mockito.when(servicio.obtenerNotificacionesFiltradas(any(), any()))
+                .thenReturn(List.of());
+
+        mockMvc.perform(get("/notificaciones"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
     @DisplayName("POST /notificaciones - Debe devolver 201 Created")
     void aniadir_CreaNotificacion() throws Exception {
         Mockito.when(servicio.aniadirNotificacion(any(Notificacion.class)))
@@ -146,5 +159,92 @@ class NotificacionControladorTest {
         // WHEN & THEN: Hacemos la petición y verificamos que el @ExceptionHandler del controlador la captura y devuelve 404
         mockMvc.perform(get("/notificaciones/99"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("POST /notificaciones - 400 si el JSON está mal formado")
+    void aniadir_JsonInvalido() throws Exception {
+
+        String jsonInvalido = "{ mensaje: 123 "; // JSON roto
+
+        mockMvc.perform(post("/notificaciones")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInvalido))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST /notificaciones - 400 si faltan campos obligatorios")
+    void aniadir_FaltanCampos() throws Exception {
+
+        String jsonSinCampos = "{}";
+
+        mockMvc.perform(post("/notificaciones")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonSinCampos))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("PUT /notificaciones/{id} - 400 si el JSON es inválido")
+    void modificar_JsonInvalido() throws Exception {
+
+        String jsonInvalido = "{ mensaje: }";
+
+        mockMvc.perform(put("/notificaciones/1")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonInvalido))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    @DisplayName("PUT /notificaciones/{id} - 404 si la notificación no existe")
+    void modificar_NoExiste() throws Exception {
+
+        Mockito.when(servicio.modificarNotificacion(eq(99L), any()))
+                .thenThrow(new NotificacionNoEncontrada());
+
+        String jsonEntrada = """
+            { "mensaje": "Nuevo mensaje" }
+            """;
+
+        mockMvc.perform(put("/notificaciones/99")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonEntrada))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("DELETE /notificaciones/{id} - 404 si no existe")
+    void eliminar_NoExiste() throws Exception {
+
+        Mockito.doThrow(new NotificacionNoEncontrada())
+                .when(servicio).eliminarNotificacion(99L);
+
+        mockMvc.perform(delete("/notificaciones/99").with(csrf()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET /notificaciones/{id} - 400 si el ID no es numérico")
+    void obtener_IdNoNumerico() throws Exception {
+
+        mockMvc.perform(get("/notificaciones/abc"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("POST /notificaciones - 415 si falta Content-Type")
+    void aniadir_SinContentType() throws Exception {
+
+        mockMvc.perform(post("/notificaciones")
+                        .with(csrf())
+                        .content("{\"mensaje\":\"hola\"}"))
+                .andExpect(status().isUnsupportedMediaType());
     }
 }
