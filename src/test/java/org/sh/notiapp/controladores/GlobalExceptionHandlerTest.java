@@ -26,7 +26,8 @@ class GlobalExceptionHandlerTest {
         // WHEN: Llamamos al método pasándole nuestra excepción directamente
         ResponseEntity<String> respuesta = manejador.handleAllExceptions(excepcionPrueba);
 
-        // THEN: Comprobamos que el código HTTP devuelto es un 500 (INTERNAL_SERVER_ERROR)
+        // THEN: Comprobamos que el código HTTP devuelto es un 500
+        // (INTERNAL_SERVER_ERROR)
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, respuesta.getStatusCode());
 
         // Comprobamos que el cuerpo de la respuesta contiene nuestro mensaje de error
@@ -42,11 +43,9 @@ class GlobalExceptionHandlerTest {
     void handleUnsupportedMediaType_Devuelve415() {
         GlobalExceptionHandler manejador = new GlobalExceptionHandler();
 
-        HttpMediaTypeNotSupportedException ex =
-                new HttpMediaTypeNotSupportedException("application/octet-stream");
+        HttpMediaTypeNotSupportedException ex = new HttpMediaTypeNotSupportedException("application/octet-stream");
 
-        ResponseEntity<String> respuesta =
-                manejador.handleUnsupportedMediaType(ex);
+        ResponseEntity<String> respuesta = manejador.handleUnsupportedMediaType(ex);
 
         assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, respuesta.getStatusCode());
     }
@@ -58,16 +57,44 @@ class GlobalExceptionHandlerTest {
         GlobalExceptionHandler manejador = new GlobalExceptionHandler();
 
         // Mock de la excepción de validación
-        MethodArgumentNotValidException ex =
-                Mockito.mock(MethodArgumentNotValidException.class);
+        MethodArgumentNotValidException ex = Mockito.mock(MethodArgumentNotValidException.class);
 
-        ResponseEntity<String> respuesta =
-                manejador.handleBadRequest(ex);
+        ResponseEntity<String> respuesta = manejador.handleBadRequest(ex);
 
         assertEquals(HttpStatus.BAD_REQUEST, respuesta.getStatusCode());
     }
 
+    // ... tus tests anteriores ...
 
+    @Test
+    @DisplayName("Debe devolver 400 cuando el JSON es ilegible (HttpMessageNotReadableException)")
+    void handleBadRequest_JsonIlegible_Devuelve400() {
+        GlobalExceptionHandler manejador = new GlobalExceptionHandler();
 
+        // Usamos el import
+        // org.springframework.http.converter.HttpMessageNotReadableException;
+        org.springframework.http.converter.HttpMessageNotReadableException ex = Mockito
+                .mock(org.springframework.http.converter.HttpMessageNotReadableException.class);
+
+        ResponseEntity<String> respuesta = manejador.handleBadRequest(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, respuesta.getStatusCode());
+        assertTrue(respuesta.getBody().contains("Datos inválidos"));
+    }
+
+    @Test
+    @DisplayName("Debe devolver 400 cuando un argumento en URL tiene el tipo incorrecto")
+    void handleBadRequest_TypeMismatch_Devuelve400() {
+        GlobalExceptionHandler manejador = new GlobalExceptionHandler();
+
+        // Usamos el import
+        // org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+        org.springframework.web.method.annotation.MethodArgumentTypeMismatchException ex = Mockito
+                .mock(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class);
+
+        ResponseEntity<String> respuesta = manejador.handleBadRequest(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, respuesta.getStatusCode());
+    }
 
 }

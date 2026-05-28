@@ -105,7 +105,7 @@ class NotificacionServicioTest {
         Notificacion n = new Notificacion();
         n.setEstado(EstadoNotificacion.PENDIENTE);
         LocalDateTime fechaPasada = LocalDateTime.now().minusHours(2);
-        n.setProgramacionEnvio(fechaPasada); 
+        n.setProgramacionEnvio(fechaPasada);
         when(repositorio.findById(1L)).thenReturn(Optional.of(n));
 
         // Act
@@ -115,7 +115,7 @@ class NotificacionServicioTest {
         assertThat(resultado.getEstado()).isEqualTo(EstadoNotificacion.ENVIADA);
         // Este assert falla a propósito demostrando el bug 2 (la máquina del tiempo)
         // El momento real debería ser cercano a NOW, no hace 2 horas.
-        assertThat(resultado.getMomentoRealEnvio()).isAfter(fechaPasada); 
+        assertThat(resultado.getMomentoRealEnvio()).isAfter(fechaPasada);
         verify(repositorio, times(1)).save(n);
     }
 
@@ -145,14 +145,16 @@ class NotificacionServicioTest {
     @DisplayName("Obtiene filtradas: Estado y Tipo no nulos")
     void obtenerFiltradas_AmbosNoNulos_LlamaMetodoCorrecto() {
         // Arrange
-        when(repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, TipoNotificacion.ANUNCIO_AULA_ESTUDIANTE))
+        when(repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE,
+                TipoNotificacion.ANUNCIO_AULA_ESTUDIANTE))
                 .thenReturn(new ArrayList<>());
 
         // Act
         servicio.obtenerNotificacionesFiltradas(EstadoNotificacion.PENDIENTE, TipoNotificacion.ANUNCIO_AULA_ESTUDIANTE);
 
         // Assert
-        verify(repositorio, times(1)).findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, TipoNotificacion.ANUNCIO_AULA_ESTUDIANTE);
+        verify(repositorio, times(1)).findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE,
+                TipoNotificacion.ANUNCIO_AULA_ESTUDIANTE);
     }
 
     @Test
@@ -188,7 +190,7 @@ class NotificacionServicioTest {
         Notificacion n = new Notificacion();
         n.setEstado(EstadoNotificacion.PENDIENTE);
         n.setProgramacionEnvio(LocalDateTime.now().minusMinutes(10)); // Expirada
-        
+
         // Usamos una lista mutable para evitar problemas con Mockito
         List<Notificacion> listaExpira = new java.util.ArrayList<>(List.of(n));
         when(repositorio.findByEstado(EstadoNotificacion.PENDIENTE)).thenReturn(listaExpira);
@@ -271,7 +273,7 @@ class NotificacionServicioTest {
         // Arrange
         Notificacion existente = new Notificacion();
         when(repositorio.findById(1L)).thenReturn(Optional.of(existente));
-        
+
         Notificacion cambios = new Notificacion();
         cambios.setAsunto("Nuevo");
         cambios.setEstado(EstadoNotificacion.ABORTADA);
@@ -314,14 +316,16 @@ class NotificacionServicioTest {
         Notificacion n = new Notificacion();
         n.setEstado(EstadoNotificacion.PENDIENTE);
         List<Notificacion> pendientes = List.of(n);
-        when(repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, TipoNotificacion.ANUNCIO_NOTA_ESTUDIANTE)).thenReturn(pendientes);
+        when(repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE,
+                TipoNotificacion.ANUNCIO_NOTA_ESTUDIANTE)).thenReturn(pendientes);
 
         // Act
         servicio.abortarPendientes(TipoNotificacion.ANUNCIO_NOTA_ESTUDIANTE);
 
         // Assert
         assertThat(n.getEstado()).isEqualTo(EstadoNotificacion.ABORTADA);
-        verify(repositorio, times(1)).findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, TipoNotificacion.ANUNCIO_NOTA_ESTUDIANTE);
+        verify(repositorio, times(1)).findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE,
+                TipoNotificacion.ANUNCIO_NOTA_ESTUDIANTE);
         verify(repositorio, times(1)).saveAll(pendientes);
     }
 }

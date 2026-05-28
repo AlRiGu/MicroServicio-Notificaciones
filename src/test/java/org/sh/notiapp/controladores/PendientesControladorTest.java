@@ -36,7 +36,7 @@ class PendientesControladorTest {
     void abortarPendientes_SinTipo_Devuelve200() throws Exception {
         // WHEN & THEN: Hacemos la petición POST sin enviar el parámetro "tipo"
         mockMvc.perform(post("/pendientes/abortar")
-                        .with(csrf())) // Necesario para peticiones POST
+                .with(csrf())) // Necesario para peticiones POST
                 .andExpect(status().isOk())
                 .andExpect(content().string("Se han abortado las notificaciones pendientes indicadas"));
 
@@ -52,12 +52,13 @@ class PendientesControladorTest {
 
         // WHEN & THEN: Hacemos la petición POST inyectando el parámetro en la URL
         mockMvc.perform(post("/pendientes/abortar")
-                        .param("tipo", tipoPrueba)
-                        .with(csrf()))
+                .param("tipo", tipoPrueba)
+                .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Se han abortado las notificaciones pendientes indicadas"));
 
-        // Verificamos que el controlador tradujo el String de la URL al Enum correcto y llamó al servicio
+        // Verificamos que el controlador tradujo el String de la URL al Enum correcto y
+        // llamó al servicio
         Mockito.verify(servicio).abortarPendientes(TipoNotificacion.valueOf(tipoPrueba));
     }
 }
