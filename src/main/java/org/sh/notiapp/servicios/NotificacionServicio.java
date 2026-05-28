@@ -25,8 +25,8 @@ public class NotificacionServicio {
                 n.getEstado() == EstadoNotificacion.PENDIENTE) {
 
             n.setEstado(EstadoNotificacion.ENVIADA);
-            n.setMomentoRealEnvio(n.getProgramacionEnvio());
-            return true; // indica que hay que guardar
+            n.setMomentoRealEnvio(LocalDateTime.now());
+            return true;
         }
         return false;
     }
@@ -65,7 +65,10 @@ public class NotificacionServicio {
         }
 
         actualizarFecha(notificaciones);
-        return notificaciones;
+        return notificaciones.stream()
+                .filter(n -> estado == null || n.getEstado() == estado)
+                .filter(n -> tipo == null || n.getTipoNotificacion() == tipo)
+                .toList();
     }
 
     public Notificacion obtenerNotificacionPorId(Long id) {
