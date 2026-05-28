@@ -7,6 +7,7 @@ import org.sh.notiapp.excepciones.NotificacionNoEncontrada;
 import org.sh.notiapp.repositorios.NotificacionRepositorio;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,29 +19,71 @@ public class NotificacionServicio {
         this.repositorio = repositorio;
     }
 
-    public List<Notificacion> obtenerTodasNotificaciones() {
-        return repositorio.findAll();
+    private boolean actualizarEstadoSiCorresponde(Notificacion n) {
+        if (n.getProgramacionEnvio() != null &&
+                n.getProgramacionEnvio().compareTo(LocalDateTime.now()) <= 0 &&
+                n.getEstado() == EstadoNotificacion.PENDIENTE) {
+
+            n.setEstado(EstadoNotificacion.ENVIADA);
+            n.setMomentoRealEnvio(LocalDateTime.now());
+            return true;
+        }
+        return false;
     }
 
-    public List<Notificacion> obtenerNotificacionesFiltradas(EstadoNotificacion estado, TipoNotificacion tipo) {
-        if (estado != null && tipo != null) {
-            return repositorio.findByEstadoAndTipoNotificacion(estado, tipo);
-        } else if (estado != null) {
-            return repositorio.findByEstado(estado);
-        } else if (tipo != null) {
-            return repositorio.findByTipoNotificacion(tipo);
-        } else {
-            return repositorio.findAll();
+    private void actualizarFecha(List<Notificacion> notificaciones) {
+        boolean hayCambios = false;
+
+        for (Notificacion n : notificaciones) {
+            if (actualizarEstadoSiCorresponde(n)) {
+                hayCambios = true;
+            }
+        }
+
+        if (hayCambios) {
+            repositorio.saveAll(notificaciones);
         }
     }
 
+    public List<Notificacion> obtenerTodasNotificaciones() {
+        List<Notificacion> notificaciones = repositorio.findAll();
+        actualizarFecha(notificaciones);
+        return notificaciones;
+    }
+
+    public List<Notificacion> obtenerNotificacionesFiltradas(EstadoNotificacion estado, TipoNotificacion tipo) {
+        List<Notificacion> notificaciones;
+
+        if (estado != null && tipo != null) {
+            notificaciones = repositorio.findByEstadoAndTipoNotificacion(estado, tipo);
+        } else if (estado != null) {
+            notificaciones = repositorio.findByEstado(estado);
+        } else if (tipo != null) {
+            notificaciones = repositorio.findByTipoNotificacion(tipo);
+        } else {
+            notificaciones = repositorio.findAll();
+        }
+
+        actualizarFecha(notificaciones);
+        return notificaciones.stream()
+                .filter(n -> estado == null || n.getEstado() == estado)
+                .filter(n -> tipo == null || n.getTipoNotificacion() == tipo)
+                .toList();
+    }
+
     public Notificacion obtenerNotificacionPorId(Long id) {
-        return repositorio.findById(id)
+        Notificacion n = repositorio.findById(id)
                 .orElseThrow(NotificacionNoEncontrada::new);
+
+        if (actualizarEstadoSiCorresponde(n)) {
+            repositorio.save(n);
+        }
+
+        return n;
     }
 
     public Notificacion aniadirNotificacion(Notificacion notificacion) {
-        notificacion.setId(null); // aseguramos que se cree nueva
+        notificacion.setId(null);
         if (notificacion.getEstado() == null) {
             notificacion.setEstado(EstadoNotificacion.PENDIENTE);
         }
@@ -48,7 +91,7 @@ public class NotificacionServicio {
     }
 
     public void eliminarNotificacion(Long id) {
-        obtenerNotificacionPorId(id); // lanza excepción si no existe
+        obtenerNotificacionPorId(id);
         repositorio.deleteById(id);
     }
 
@@ -69,16 +112,15 @@ public class NotificacionServicio {
         return repositorio.save(existente);
     }
 
-    public void abortarPendientes(org.sh.notiapp.enums.TipoNotificacion tipo) {
-        List<Notificacion> pendientes;
-        if (tipo == null) {
-            pendientes = repositorio.findByEstado(EstadoNotificacion.PENDIENTE);
-        } else {
-            pendientes = repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, tipo);
+    public void abortarPendientes(TipoNotificacion tipo) {
+        List<Notificacion> pendientes = (tipo == null)
+                ? repositorio.findByEstado(EstadoNotificacion.PENDIENTE)
+                : repositorio.findByEstadoAndTipoNotificacion(EstadoNotificacion.PENDIENTE, tipo);
+
+        for (Notificacion n : pendientes) {
+            n.setEstado(EstadoNotificacion.ABORTADA);
         }
-        for (Notificacion notificacion : pendientes) {
-            notificacion.setEstado(EstadoNotificacion.ABORTADA);
-        }
+
         repositorio.saveAll(pendientes);
     }
 }

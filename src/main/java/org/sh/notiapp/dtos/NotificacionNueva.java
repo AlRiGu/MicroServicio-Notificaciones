@@ -1,5 +1,6 @@
 package org.sh.notiapp.dtos;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import org.sh.notiapp.enums.TipoNotificacion;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotificacionNueva {
+    @NotBlank
     private String asunto;
     private String cuerpo;
     private String emailDestino;
